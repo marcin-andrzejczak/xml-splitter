@@ -1,0 +1,1 @@
+Simple XML file splitter made using StAX
