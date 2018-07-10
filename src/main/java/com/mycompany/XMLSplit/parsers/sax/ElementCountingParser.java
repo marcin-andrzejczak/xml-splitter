@@ -1,6 +1,7 @@
-package com.mycompany.XMLSplit.parsers;
+package com.mycompany.XMLSplit.parsers.sax;
 
 import com.mycompany.XMLSplit.handlers.ElementCountingHandler;
+import com.mycompany.XMLSplit.parsers.PurposedParser;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;

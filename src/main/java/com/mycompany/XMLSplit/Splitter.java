@@ -1,9 +1,7 @@
 package com.mycompany.XMLSplit;
 
-import com.mycompany.XMLSplit.parsers.ElementCountingParser;
-import com.mycompany.XMLSplit.parsers.PurposedParser;
+import com.mycompany.XMLSplit.parsers.sax.ElementCountingParser;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.*;
 import javax.xml.stream.events.XMLEvent;
 import java.io.File;
@@ -17,8 +15,8 @@ public class Splitter {
 
     private XMLInputFactory inFactory;
     private XMLOutputFactory outFactory;
-    private XMLEventFactory eventFactory;
     private XMLEventReader eventReader;
+    private XMLEventFactory eventFactory;
 
     private List<XMLEventWriter> outputWriters;
 
@@ -65,6 +63,9 @@ public class Splitter {
                 currentWriterTagCount++;
             } else {
                 writeToAll(eventReader.nextEvent());
+                if(event.isStartDocument()){
+                    writeToAll(eventFactory.createCharacters("\n"));
+                }
             }
 
             flushWriters();
@@ -78,10 +79,11 @@ public class Splitter {
         try {
             while( reader.hasNext() ){
                 XMLEvent event = reader.nextEvent();
-                if( !(event.isEndElement() && event.asEndElement().getName().getLocalPart().equalsIgnoreCase(tag)) ) {
-                    writer.add(event);
-                } else {
-                    writer.add(event);
+                writer.add(event);
+                if( event.isEndElement() && event.asEndElement().getName().getLocalPart().equalsIgnoreCase(tag) ){
+                    if( reader.peek().isCharacters() && reader.peek().asCharacters().isWhiteSpace() ){
+                        writer.add(reader.nextEvent());
+                    }
                     return;
                 }
             }
@@ -112,9 +114,9 @@ public class Splitter {
         if(outputWriters == null){
             outputWriters = new ArrayList<>();
         }
-
+        String fileName = source.getParent() + "/" + source.getName().replaceFirst("[.][^.]+$", "") + String.format("_output_%d.xml", fileNumber);
         try {
-            FileWriter fileWriter = new FileWriter(source.getParent() + String.format("/data_output_%d.xml", fileNumber));
+            FileWriter fileWriter = new FileWriter(fileName);
             outputWriters.add(outFactory.createXMLEventWriter(fileWriter));
         } catch (Exception ex){
             ex.printStackTrace();

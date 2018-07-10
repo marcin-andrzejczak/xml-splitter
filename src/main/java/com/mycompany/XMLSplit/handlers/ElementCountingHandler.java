@@ -4,7 +4,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class ElementCountingHandler extends DefaultHandler implements ValuedHandler{
+public class ElementCountingHandler extends DefaultHandler implements ValuedHandler {
 
     private Integer count = 0;
     private String tag;
@@ -27,11 +27,4 @@ public class ElementCountingHandler extends DefaultHandler implements ValuedHand
         return count;
     }
 
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
 }

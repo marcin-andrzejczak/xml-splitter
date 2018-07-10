@@ -1,15 +1,12 @@
 package com.mycompany.XMLSplit;
 
-import com.mycompany.XMLSplit.parsers.ElementCountingParser;
 import com.mycompany.XMLSplit.parsers.PurposedParser;
-import org.junit.After;
+import com.mycompany.XMLSplit.parsers.sax.ElementCountingParser;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,17 +70,6 @@ public class SplitterTest {
 
         } catch (Exception ex){
             fail("Exception occurred!");
-            ex.printStackTrace();
-        }
-    }
-
-    @After
-    public void clearData(){
-        try {
-            for (String file : filesToClear) {
-                Files.deleteIfExists(Paths.get(file));
-            }
-        } catch (Exception ex){
             ex.printStackTrace();
         }
     }
